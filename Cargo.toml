@@ -2,6 +2,10 @@
 name = "libosrs"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "An Oldschool Runescape API written in Rust"
+repository = "https://github.com/phongse/libosrs/"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
