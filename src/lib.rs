@@ -1,11 +1,11 @@
 use std::error::Error;
 
 use csv::Reader;
+use reqwest::StatusCode;
 
 mod constants;
 pub mod hiscore;
 pub mod skill;
-use crate::constants::HISCORE_URL;
 use crate::hiscore::{Bosses, Hiscore, Minigames, Skills};
 use crate::skill::{Boss, Minigame, Skill};
 
@@ -76,30 +76,29 @@ impl ClientOSRS {
         Ok((skills, minigames, bosses))
     }
 
-    pub async fn get_hiscore(&self, name: &str) -> Result<Hiscore, Box<dyn Error>> {
-        let url = format!("{}{}", HISCORE_URL, name);
-        let res = self
-            .req_client
-            .get(url)
-            .send()
-            .await
-            .unwrap()
-            .text()
-            .await
-            .unwrap();
+    pub async fn get_hiscore(&self, name: &str, gamemode: &str) -> Result<Hiscore, Box<dyn Error>> {
+        let url = format!("{}{}", constants::get_gamemode(gamemode), name);
+        let response = self.req_client.get(url).send().await?;
 
-        let rdr = Self::read_csv(&res);
-        let (skills, minigames, bosses) = Self::parse_records(rdr).await?;
+        match response.status() {
+            StatusCode::OK => {
+                let res = response.text().await?;
 
-        Ok(Hiscore::build_hiscore(
-            Skills::build_skills(skills),
-            Minigames::build_minigames(minigames),
-            Bosses::build_bosses(bosses),
-        ))
+                let rdr = Self::read_csv(&res);
+                let (skills, minigames, bosses) = Self::parse_records(rdr).await?;
+
+                Ok(Hiscore::build_hiscore(
+                    Skills::build_skills(skills),
+                    Minigames::build_minigames(minigames),
+                    Bosses::build_bosses(bosses),
+                ))
+            }
+            _ => Err("Something went wrong with the request.".into()),
+        }
     }
 
-    pub async fn get_hiscore_json(&self, name: &str) -> String {
-        let hiscore = match self.get_hiscore(name).await {
+    pub async fn get_hiscore_json(&self, name: &str, gamemode: &str) -> String {
+        let hiscore = match self.get_hiscore(name, gamemode).await {
             Ok(hiscore) => hiscore,
             Err(e) => panic!("{}", e),
         };

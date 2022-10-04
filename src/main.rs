@@ -4,7 +4,7 @@ use libosrs;
 async fn main() {
     let client = libosrs::ClientOSRS::new();
 
-    let soupshi = &client.get_hiscore("Soupshi").await.unwrap();
+    let soupshi = &client.get_hiscore("Soupshi", "regular").await.unwrap();
 
     println!("Overall: {:#?}", soupshi.skills.overall);
 
@@ -14,5 +14,8 @@ async fn main() {
     println!("Vorkath rank: {}", soupshi.bosses.vorkath.rank);
     println!("Vorkath kills: {}", soupshi.bosses.vorkath.score);
 
-    println!("JSON output: {}", &client.get_hiscore_json("Soupshi").await);
+    println!(
+        "JSON output: {}",
+        &client.get_hiscore_json("Soupshi", "regular").await
+    );
 }
