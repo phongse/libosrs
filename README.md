@@ -4,16 +4,14 @@ An Oldschool Runescape API library written in Rust. Can serialize the output int
 
 ## Examples
 
-```Rust
+```rust
 use libosrs;
 
 #[tokio::main]
 async fn main() {
-    // create a new client
     let client = libosrs::ClientOSRS::new();
 
-    // get player hiscore
-    let soupshi = &client.get_hiscore("Soupshi").await.unwrap();
+    let soupshi = &client.get_hiscore("Soupshi", "regular").await.unwrap();
 
     println!("Overall: {:#?}", soupshi.skills.overall);
 
@@ -23,12 +21,22 @@ async fn main() {
     println!("Vorkath rank: {}", soupshi.bosses.vorkath.rank);
     println!("Vorkath kills: {}", soupshi.bosses.vorkath.score);
 
-    // get player hiscore in json
-    let soupshi_json = &client.get_hiscore_json("Soupshi").await;
-    println!("JSON output: {}", soupshi_json);
+    println!(
+        "JSON output: {}",
+        &client.get_hiscore_json("Soupshi", "regular").await
+    );
 }
+```
+
+## Game modes
 
 ```
+"regular"
+"ironman"
+"hardcore"
+"ultimate"
+```
+Anything else will default to regular game mode.
 
 ## Todo
 - [ ] Blocking IO
