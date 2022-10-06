@@ -59,6 +59,10 @@ impl Skills {
             construction: skills[23],
         }
     }
+
+    pub fn get_overall_xp(self) -> u64 {
+        self.overall.xp
+    }
 }
 
 #[derive(Default, Debug, Serialize)]
