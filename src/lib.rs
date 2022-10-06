@@ -100,10 +100,11 @@ impl ClientOSRS {
     pub async fn get_hiscore_json(&self, name: &str, gamemode: &str) -> String {
         let hiscore = match self.get_hiscore(name, gamemode).await {
             Ok(hiscore) => hiscore,
-            Err(e) => panic!("{}", e),
+            Err(_) => Hiscore {
+                ..Default::default()
+            },
         };
 
-        let hiscore_json = serde_json::to_string(&hiscore).unwrap();
-        hiscore_json
+        hiscore.to_json()
     }
 }
