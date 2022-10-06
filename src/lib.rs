@@ -38,9 +38,18 @@ impl ClientOSRS {
             match index {
                 0..=23 => {
                     let skill: Skill = Skill {
-                        rank: (&row[0]).parse::<u64>().unwrap(),
-                        level: (&row[1]).parse::<u64>().unwrap(),
-                        xp: (&row[2]).parse::<u64>().unwrap(),
+                        rank: match (&row[0]).parse::<u64>() {
+                            Ok(x) => x,
+                            Err(_) => 0,
+                        },
+                        level: match (&row[1]).parse::<u64>() {
+                            Ok(x) => x,
+                            Err(_) => 0,
+                        },
+                        xp: match (&row[2]).parse::<u64>() {
+                            Ok(x) => x,
+                            Err(_) => 0,
+                        },
                     };
                     skills.push(skill);
                 }
