@@ -2,11 +2,13 @@ use std::error::Error;
 
 use async_recursion::async_recursion;
 use csv::Reader;
+use player::Player;
 use reqwest::StatusCode;
 
 mod constants;
 pub mod gamemode;
 pub mod hiscore;
+pub mod player;
 pub mod skill;
 use crate::gamemode::Gamemode;
 use crate::hiscore::{Bosses, Hiscore, Minigames, Skills};
@@ -175,5 +177,23 @@ impl ClientOSRS {
         };
 
         hiscore.to_json()
+    }
+
+    pub async fn get_player(&self, name: &str, gamemode: Gamemode) -> Player {
+        Player::build_player(
+            name,
+            self.get_hiscore(name, gamemode).await.unwrap(),
+            gamemode,
+        )
+    }
+
+    pub async fn get_player_json(&self, name: &str, gamemode: Gamemode) -> String {
+        let player = Player::build_player(
+            name,
+            self.get_hiscore(name, gamemode).await.unwrap(),
+            gamemode,
+        );
+
+        player.to_json()
     }
 }
