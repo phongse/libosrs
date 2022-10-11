@@ -1,13 +1,13 @@
-use libosrs;
+use libosrs::gamemode::Gamemode;
 
 #[tokio::main]
 async fn main() {
     let name = "Soupshi";
-    let mut gamemode = "auto";
+    let mut gamemode: Gamemode = Gamemode::Auto;
 
     let client = libosrs::ClientOSRS::new();
 
-    let soupshi = &client.get_hiscore(name, gamemode).await.unwrap();
+    let soupshi = client.get_hiscore(name, gamemode).await.unwrap();
 
     println!("Overall: {:#?}", soupshi.skills.overall);
     println!("Agility level: {}", soupshi.skills.agility.level);
@@ -19,12 +19,14 @@ async fn main() {
     println!("JSON output: {}", soupshi.to_json());
 
     // Try to retrieve a players current gamemode
-    gamemode = &client.get_player_gamemode(name).await;
-    println!("{}", gamemode);
+    gamemode = client.get_player_gamemode(name).await;
+    println!("{:#?}", gamemode);
 
     // Request hiscore from API and return json
     println!(
         "JSON output: {}",
-        &client.get_hiscore_json(name, gamemode).await
+        client.get_hiscore_json(name, gamemode).await
+    );
+
     );
 }

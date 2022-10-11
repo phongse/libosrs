@@ -5,8 +5,10 @@ use csv::Reader;
 use reqwest::StatusCode;
 
 mod constants;
+pub mod gamemode;
 pub mod hiscore;
 pub mod skill;
+use crate::gamemode::Gamemode;
 use crate::hiscore::{Bosses, Hiscore, Minigames, Skills};
 use crate::skill::{Boss, Minigame, Skill};
 
@@ -20,33 +22,49 @@ impl ClientOSRS {
         client
     }
 
-    pub async fn get_player_gamemode(&self, name: &str) -> &str {
-        let regular = self.get_hiscore(name, "regular").await.unwrap().skills;
+    pub async fn get_player_gamemode(&self, name: &str) -> Gamemode {
+        let regular = self
+            .get_hiscore(name, Gamemode::Regular)
+            .await
+            .unwrap()
+            .skills;
         let regular_xp = Skills::get_overall_xp(regular);
 
-        let ironman = self.get_hiscore(name, "ironman").await.unwrap().skills;
+        let ironman = self
+            .get_hiscore(name, Gamemode::Ironman)
+            .await
+            .unwrap()
+            .skills;
         let ironman_xp = Skills::get_overall_xp(ironman);
 
         if ironman_xp < regular_xp {
-            return "regular";
+            return Gamemode::Regular;
         }
 
-        let hardcore = self.get_hiscore(name, "hardcore").await.unwrap().skills;
+        let hardcore = self
+            .get_hiscore(name, Gamemode::Hardcore)
+            .await
+            .unwrap()
+            .skills;
         let hardcore_xp = Skills::get_overall_xp(hardcore);
 
         if hardcore_xp >= ironman_xp {
-            return "hardcore";
+            return Gamemode::Hardcore;
         }
 
-        let ultimate = self.get_hiscore(name, "ultimate").await.unwrap().skills;
+        let ultimate = self
+            .get_hiscore(name, Gamemode::Ultimate)
+            .await
+            .unwrap()
+            .skills;
         let ultimate_xp = Skills::get_overall_xp(ultimate);
 
         if ultimate_xp >= ironman_xp {
-            return "ultimate";
+            return Gamemode::Ultimate;
         }
 
         // if neither hardcore or ultimate, then fallback to ironman
-        "ironman"
+        Gamemode::Ironman
     }
 
     fn read_csv(res: &String) -> Reader<&[u8]> {
@@ -116,10 +134,13 @@ impl ClientOSRS {
     }
 
     #[async_recursion]
-    pub async fn get_hiscore(&self, name: &str, gamemode: &str) -> Result<Hiscore, Box<dyn Error>> {
-
-        let gamemode: &str = match gamemode {
-            "auto" => self.get_player_gamemode(name).await,
+    pub async fn get_hiscore(
+        &self,
+        name: &str,
+        gamemode: Gamemode,
+    ) -> Result<Hiscore, Box<dyn Error>> {
+        let gamemode: Gamemode = match gamemode {
+            Gamemode::Auto => self.get_player_gamemode(name).await,
             _ => gamemode,
         };
 
@@ -145,7 +166,7 @@ impl ClientOSRS {
         }
     }
 
-    pub async fn get_hiscore_json(&self, name: &str, gamemode: &str) -> String {
+    pub async fn get_hiscore_json(&self, name: &str, gamemode: Gamemode) -> String {
         let hiscore = match self.get_hiscore(name, gamemode).await {
             Ok(hiscore) => hiscore,
             Err(_) => Hiscore {

@@ -1,3 +1,5 @@
+use crate::gamemode::Gamemode;
+
 pub const HISCORE_URL: &str =
     "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=";
 
@@ -19,15 +21,15 @@ pub const HISCORE_URL_SEASONAL: &str =
 pub const HISCORE_URL_TOURNAMENT: &str =
     "https://secure.runescape.com/m=hiscore_oldschool_tournament/index_lite.ws?player=";
 
-pub fn get_gamemode(gamemode: &str) -> &str {
+pub fn get_gamemode(gamemode: Gamemode) -> &'static str {
     match gamemode {
-        "regular" => HISCORE_URL,
-        "ironman" => HISCORE_URL_IRONMAN,
-        "hardcore" => HISCORE_URL_HARDCORE_IRONMAN,
-        "ultimate" => HISCORE_URL_ULTIMATE,
-        "deadman" => HISCORE_URL_DEADMAN,
-        "seasonal" => HISCORE_URL_SEASONAL,
-        "tournament" => HISCORE_URL_TOURNAMENT,
+        Gamemode::Regular => HISCORE_URL,
+        Gamemode::Ironman => HISCORE_URL_IRONMAN,
+        Gamemode::Hardcore => HISCORE_URL_HARDCORE_IRONMAN,
+        Gamemode::Ultimate => HISCORE_URL_ULTIMATE,
+        Gamemode::Deadman => HISCORE_URL_DEADMAN,
+        Gamemode::Seasonal => HISCORE_URL_SEASONAL,
+        Gamemode::Tournament => HISCORE_URL_TOURNAMENT,
         _ => HISCORE_URL,
     }
 }
