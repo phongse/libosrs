@@ -36,6 +36,7 @@ async fn main() {
         client.get_hiscore_json(name, gamemode).await
     );
 
+    // Get Player struct and Player json
     println!("{:#?}", client.get_player(name, gamemode).await);
     println!(
         "JSON output: {}",
@@ -56,7 +57,6 @@ Ultimate
 Deadman
 Seasonal
 Tournament
-
 ```
 
 `Auto` will try to fetch a players current gamemode from `Regular`, `Ironman`, `Hardcore` and `Ultimate`, i.e. a player who used to be Ironman but converted to regular will output their regular game stats. Only works if they gained Xp or Boss scores after convertion.
