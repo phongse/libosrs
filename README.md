@@ -35,6 +35,12 @@ async fn main() {
         "JSON output: {}",
         client.get_hiscore_json(name, gamemode).await
     );
+
+    println!("{:#?}", client.get_player(name, gamemode).await);
+    println!(
+        "JSON output: {}",
+        client.get_player_json(name, gamemode).await
+    );
 }
 
 ```
