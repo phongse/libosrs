@@ -1,6 +1,6 @@
 # libosrs
 
-An Oldschool Runescape API library written in Rust. Can serialize the output into JSON format.
+An Oldschool RuneScape API library written in Rust. Can serialize the output into JSON format.
 
 ## Examples
 
@@ -49,25 +49,25 @@ async fn main() {
 ## Game modes
 
 ```
-Auto
-Regular
-Ironman
-Hardcore
-Ultimate
-Deadman
-Seasonal
-Tournament
+Gamemode::Auto
+Gamemode::Regular
+Gamemode::Ironman
+Gamemode::Hardcore
+Gamemode::Ultimate
+Gamemode::Deadman
+Gamemode::Seasonal
+Gamemode::Tournament
 ```
 
-`Auto` will try to fetch a players current gamemode from `Regular`, `Ironman`, `Hardcore` and `Ultimate`, i.e. a player who used to be Ironman but converted to regular will output their regular game stats. Only works if they gained Xp or Boss scores after convertion.
+`Auto` will try to fetch a player's current game mode from `Regular`, `Ironman`, `Hardcore` and `Ultimate`, i.e. a player who used to be Iron Man but converted to regular will output their regular game stats. Only works if they gained Xp or Boss scores after conversion.
 
 ## Struct names
 
-See the [docs.rs](https://docs.rs/libosrs/0.1.1/libosrs/hiscore/index.html) page.
+See the [docs.rs](https://docs.rs/libosrs/latest/libosrs/hiscore/index.html) page.
 
 ## Todo
 
 - [ ] Blocking IO
-- [x] Serialize to json without re-calling Runescape API
+- [x] Serialize to json without re-calling RuneScape API
 - [ ] Formatters
 - [ ] Grand Exchange

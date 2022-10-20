@@ -24,16 +24,12 @@ pub fn combatlevel(skills: &Skills) -> u16 {
         skills.hitpoints.level as f32,
         skills.prayer.level as f32,
     );
-    println!("base: {}", baselevel);
 
     let meleelevel: f32 = melee(skills.attack.level as f32, skills.strength.level as f32);
-    println!("melee: {}", meleelevel);
 
     let rangedlevel: f32 = ranged(skills.ranged.level as f32);
-    println!("ranged: {}", rangedlevel);
 
     let magiclevel: f32 = magic(skills.magic.level as f32);
-    println!("magic: {}", magiclevel);
 
     let not_melee;
     if rangedlevel >= magiclevel {
@@ -41,7 +37,6 @@ pub fn combatlevel(skills: &Skills) -> u16 {
     } else {
         not_melee = magiclevel;
     }
-    println!("{}", (baselevel + f32::max(meleelevel, not_melee)).floor());
 
     return (baselevel + f32::max(meleelevel, not_melee)).floor() as u16;
 }
