@@ -1,6 +1,7 @@
 use serde::Serialize;
 
 use crate::skill::{Boss, Minigame, Skill};
+use crate::util;
 
 #[derive(Default, Debug, Serialize)]
 pub struct Skills {
@@ -218,6 +219,7 @@ impl Bosses {
 
 #[derive(Default, Debug, Serialize)]
 pub struct Hiscore {
+    pub combatlevel: u16,
     pub skills: Skills,
     pub minigames: Minigames,
     pub bosses: Bosses,
@@ -226,6 +228,7 @@ pub struct Hiscore {
 impl Hiscore {
     pub fn build_hiscore(skills: Skills, minigames: Minigames, bosses: Bosses) -> Hiscore {
         Hiscore {
+            combatlevel: util::combatlvl::combatlevel(&skills),
             skills,
             minigames,
             bosses,

@@ -10,6 +10,7 @@ pub mod gamemode;
 pub mod hiscore;
 pub mod player;
 pub mod skill;
+pub mod util;
 use crate::gamemode::Gamemode;
 use crate::hiscore::{Bosses, Hiscore, Minigames, Skills};
 use crate::skill::{Boss, Minigame, Skill};
